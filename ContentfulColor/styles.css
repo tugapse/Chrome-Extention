@@ -1,0 +1,40 @@
+
+
+.cm-string{
+    color:rgb(161, 104, 18);
+}
+.cm-string::before{
+    content: "\"";
+    position: absolute;
+    color:brown;
+}
+.cm-string::after{
+    content: "\"";
+    position: absolute;
+    transform: translateX(-8px);
+    color:brown;
+}
+
+
+.cm-property{
+    color:slateblue;
+}
+.cm-property::before{
+    content: "\"";
+    position: absolute;
+    color:brown;
+}.cm-property::after{
+    content: "\"";
+    position: absolute;
+    transform: translateX(-8px);
+    color:brown;
+}
+
+
+.cm-number{
+    color:darkblue;
+}
+
+.cm-atom{
+    color:blue;
+}

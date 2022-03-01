@@ -1,0 +1,13 @@
+{
+    "name": "Contentful json Highlighter",
+    "description": "Sintaxe highlight for contentful web app",
+    "version": "0.1",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+          "matches": ["https://app.contentful.com/spaces*"],
+          "css": ["styles.css"],
+          "js": ["content-script.js"]
+        }
+      ]
+}
