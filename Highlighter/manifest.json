@@ -5,7 +5,7 @@
     "manifest_version": 3,
     "content_scripts": [
         {
-          "matches": ["https://app.contentful.com/spaces*"],
+          "matches": ["https://app.contentful.com/*"],
           "css": ["styles.css"],
           "js": ["content-script.js"]
         }
