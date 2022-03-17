@@ -1,0 +1,21 @@
+.CodeMirror-scroll {
+    padding-left: 15px;
+}
+
+.CodeMirror-line.hidden{
+    display: none;
+}
+
+.fold-start{
+    cursor: pointer;
+    content: "+";
+    font-size: 18px;
+    position: absolute;
+    left: -8px;
+    transform: translate(-2px,-3px);
+    padding: 2px;
+    font-family: fantasy;
+}
+.fold-start + span {
+    border-bottom: darkred dashed 1px;
+}
