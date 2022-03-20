@@ -1,69 +1,71 @@
 class TreeNode {
   static Root;
-  editor = null;
+  jsonEditor = null;
   htmlElemnt = null;
   foldElement = null;
   connectedNode = null;
   lines = [];
   parent = null;
-  jsonEditor = null;
   collapsed = false;
 
   constructor(element) {
     this.htmlElemnt = element;
   }
 
-  colapseTree = () => {
-    const lines = this.editor.getLines();
+  collapseTree() {
+    const lines = this.jsonEditor.editorAddon.lines;
     const linesArray = Array.prototype.slice.call(lines);
     const startIndex = linesArray.indexOf(this.htmlElemnt) + 1;
     const endIndex = linesArray.indexOf(this.connectedNode.htmlElemnt);
     const validLines = linesArray.slice(startIndex, endIndex);
-    validLines.forEach((line) => this.addLine(line));
-    console.debug("index", this.htmlElemnt, startIndex, endIndex);
+    this.htmlElemnt.classList.add("collapsed");
+    validLines.forEach((line) => this._addLine(line));
     this.foldElement.textContent = "+";
-  };
+    this.collapsed = true;
+  }
 
-  expandTree = () => {
+  expandTree() {
     this.lines.forEach((line) => line.classList.remove("hidden"));
+    this.htmlElemnt.classList.remove("collapsed");
     if (this.connectedNode)
-      this.connectedNode.htmlElemnt.style.background = "#fff";
+      this.connectedNode.htmlElemnt.style.background = "transparent";
     this.foldElement.textContent = "-";
-  };
-
-  addLine(line) {
-    line.classList.add("hidden");
-    this.lines.push(line);
+    this.collapsed = false;
   }
 
   initStartFold(editor) {
-    
-    this.editor = editor;
-    this.clear()
-    const span = editor
+    this.jsonEditor = editor;
     this.foldElement = document.createElement("span");
     this.foldElement.textContent = "-";
     this.foldElement.classList.add("fold-start");
-    this.foldElement.addEventListener("click", this._handleFoldClick);
+    this.foldElement.onclick = (e) => this._handleFoldClick(e);
+    this.htmlElemnt.onclick = (e) =>
+      this.collapsed && !e.foldDone && this.expandTree();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
   }
 
   initEndFold(editor, startNode) {
-    if (!startNode) startNode = editor.rootNode;
-    this.editor = editor;
+    this.jsonEditor = editor;
     this.connectedNode = startNode;
-    startNode.connectedNode = this;
     this.htmlElemnt.classList.add("fold-end");
+    if (!startNode) {
+      console.debug("[fa]", editor, startNode, this);
+    }
+    startNode.connectedNode = this;
   }
-  _handleFoldClick = (e) => {
+  _handleFoldClick(e) {
+    e.foldDone = true;
     if (this.collapsed) {
       this.expandTree();
     } else {
-      this.colapseTree();
+      this.collapseTree();
     }
-    this.collapsed = !this.collapsed;
-    console.debug(this, e);
-    this.connectedNode.htmlElemnt.style.background = "rgba(221 216 221,0.4)";
     window.dispatchEvent(new Event("resize"));
-  };
+  }
+
+  _addLine(line) {
+    line.nodeEditor = this;
+    line.classList.add("hidden");
+    this.lines.push(line);
+  }
 }

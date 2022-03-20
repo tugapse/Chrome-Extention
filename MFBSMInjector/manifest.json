@@ -1,0 +1,13 @@
+{
+    "name": "Lovys QA Webapp Injector POC TEST",
+    "description": "NA",
+    "version": "0.1",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+          "matches": ["https://app.contentful.com/*"],
+          "css": ["styles.css"],
+          "js": ["content-script.js"]
+        }
+      ]
+}

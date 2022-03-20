@@ -7,7 +7,12 @@
     {
       "matches": ["https://app.contentful.com/*"],
       "css": ["styles.css"],
-      "js": ["tree-node.js", "content-script.js"]
+      "js": [
+        "config.js",
+        "jsoneditor-addon.js",
+        "tree-node.js",
+        "content-script.js"
+      ]
     }
   ]
 }

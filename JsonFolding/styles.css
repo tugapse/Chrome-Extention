@@ -16,6 +16,8 @@
     padding: 2px;
     font-family: fantasy;
 }
-.fold-start + span {
+
+
+.CodeMirror-line.collapsed > :nth-child(2) {
     border-bottom: darkred dashed 1px;
 }
