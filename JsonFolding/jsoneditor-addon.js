@@ -1,8 +1,6 @@
 class JsonEditorAddon {
   htmlElement = null;
   rootNode = null;
-  lastKeyPressTime = null;
-  updateTimer = null;
   config = false;
 
   get lines() {
@@ -39,19 +37,8 @@ class JsonEditorAddon {
     return parentIndex;
   }
 
-  unload() {}
-
   addListeners() {
-    this.htmlElement.keyup = () => this._updateTimer();
-  }
-
-  _updateTimer(e) {
-    const now = Date.now();
-    const validTime = this.lastKeyPressTime + this.config.timeBeforeUpdate;
-    if (now > validTime) {
-      this.reload();
-      clearInterval(this._updateTimer);
-    }
+    this.htmlElement.onkeyup = () => this.reload();
   }
 
   _sanitizeLine(line) {
@@ -72,7 +59,6 @@ class JsonEditorAddon {
 
   _createEndNode(editor, nodes, index, line) {
     let startNode = index == 0 ? nodes[0] : nodes.splice(nodes.length - 1)[0];
-    console.debug("[fa] startNode", startNode);
     const endNode = line.treeNode || new TreeNode(line);
     endNode.initEndFold(editor, startNode);
     return index - 1;
