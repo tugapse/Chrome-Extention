@@ -1,6 +1,6 @@
 {
-  "name": "Contentful json folding tool",
-  "description": "do something :) on the contentful web app",
+  "name": "Contentful json editor enhancements",
+  "description": "WIP",
   "version": "0.1",
   "manifest_version": 3,
   "content_scripts": [

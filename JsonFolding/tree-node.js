@@ -35,7 +35,9 @@ class TreeNode {
 
   initStartFold(editor) {
     this.jsonEditor = editor;
-    this.foldElement = document.createElement("span");
+    this.foldElement =
+      this.htmlElemnt.querySelector(".fold-start") ||
+      document.createElement("span");
     this.foldElement.textContent = "-";
     this.foldElement.classList.add("fold-start");
     this.foldElement.onclick = (e) => this._handleFoldClick(e);
@@ -48,9 +50,6 @@ class TreeNode {
     this.jsonEditor = editor;
     this.connectedNode = startNode;
     this.htmlElemnt.classList.add("fold-end");
-    if (!startNode) {
-      console.debug("[fa]", editor, startNode, this);
-    }
     startNode.connectedNode = this;
   }
   _handleFoldClick(e) {
