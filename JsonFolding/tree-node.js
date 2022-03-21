@@ -13,8 +13,8 @@ class TreeNode {
   }
 
   collapse() {
-    const validLines = this._getValidLines();
-    validLines.forEach((line) => this._addLine(line));
+    const validLines = this.getValidLines();
+    validLines.forEach((line) => this.addLine(line));
     this.htmlElemnt.classList.add("collapsed");
     this.foldElement.textContent = "+";
     this.collapsed = true;
@@ -27,15 +27,15 @@ class TreeNode {
     this.htmlElemnt.classList.remove("collapsed");
 
     if (updateChildren) {
-      this.lines.forEach((line) => this._expandLine(line));
+      this.lines.forEach((line) => this.expandLine(line));
     }
   }
 
   initStartFold(editor) {
     this.jsonEditor = editor;
     this.htmlElemnt.classList.add("has-fold");
-    this._createFoldElement();
-    this._addEvents();
+    this.createFoldElement();
+    this.addEvents();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
   }
   initEndFold(editor, startNode) {
@@ -45,12 +45,12 @@ class TreeNode {
     startNode.connectedNode = this;
   }
 
-  _addEvents() {
-    this.htmlElemnt.onclick = (e) => this._checkExpand(e);
-    this.foldElement.onmouseenter = (e) => this._highlightNodes();
-    this.foldElement.onmouseleave = (e) => this._highlightNodes(false);
+  addEvents() {
+    this.htmlElemnt.onclick = (e) => this.checkExpand(e);
+    this.foldElement.onmouseenter = (e) => this.highlightNodes();
+    this.foldElement.onmouseleave = (e) => this.highlightNodes(false);
   }
-  _getValidLines() {
+  getValidLines() {
     const lines = this.jsonEditor.editorAddon.lines;
     const linesArray = Array.prototype.slice.call(lines);
     const startIndex = linesArray.indexOf(this.htmlElemnt) + 1;
@@ -58,14 +58,14 @@ class TreeNode {
     const validLines = linesArray.slice(startIndex, endIndex);
     return validLines;
   }
-  _highlightNodes(highlight = true) {
+  highlightNodes(highlight = true) {
     const lineClass = "highlight";
 
     highlight
       ? this.htmlElemnt.classList.add(lineClass)
       : this.htmlElemnt.classList.remove(lineClass);
 
-    this._getValidLines().forEach((line) => {
+    this.getValidLines().forEach((line) => {
       if (highlight) {
         line.classList.add(lineClass);
       } else {
@@ -79,27 +79,28 @@ class TreeNode {
         : elm.classList.remove(lineClass);
     }
   }
-  _checkExpand(e) {
+  
+  checkExpand(e) {
     this.collapsed && !e.foldDone && this.expand();
   }
 
-  _createFoldElement() {
+  createFoldElement() {
     this.foldElement =
       this.htmlElemnt.querySelector(".fold-start") ||
       document.createElement("span");
     this.foldElement.textContent = "-";
     this.foldElement.classList.add("fold-start");
-    this.foldElement.onclick = (e) => this._handleFoldClick(e);
+    this.foldElement.onclick = (e) => this.handleFoldClick(e);
   }
 
-  _expandLine(line) {
+  expandLine(line) {
     line.classList.remove("hidden");
     if (line.foldNode) {
       line.foldNode.expand(false);
     }
   }
 
-  _handleFoldClick(e) {
+  handleFoldClick(e) {
     e.foldDone = true;
     if (this.collapsed) {
       this.expand();
@@ -109,7 +110,7 @@ class TreeNode {
     window.dispatchEvent(new Event("resize"));
   }
 
-  _addLine(line) {
+  addLine(line) {
     line.nodeEditor = this;
     line.classList.add("hidden");
     this.lines.push(line);

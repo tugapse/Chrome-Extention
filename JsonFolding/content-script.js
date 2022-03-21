@@ -1,6 +1,3 @@
-// nothing to do here just import the css :
-console.debug("json folding Loaded");
-
 class WidgetControler {
   editors = null;
 
@@ -30,17 +27,17 @@ class WidgetControler {
     }
     editor.editorAddon.reload();
   }
-  _clearLine() {
+  clearLine() {
     line.classlist.remove("hidden");
   }
 
   waitUntilPageReady = () => {
     return new Promise((resolve, rej) => {
-      this._waitForPublishButtonRowTimeout(3000, resolve);
+      this.waitForPublishButtonRowTimeout(3000, resolve);
     });
   };
 
-  _waitForPublishButtonRowTimeout = (timeout, resolve) => {
+  waitForPublishButtonRowTimeout = (timeout, resolve) => {
     const elementButttonElement = document.querySelector(
       ".publish-buttons-row"
     );
@@ -49,15 +46,15 @@ class WidgetControler {
       return;
     }
     setTimeout(
-      () => this._waitForPublishButtonRowTimeout(timeout, resolve),
+      () => this.waitForPublishButtonRowTimeout(timeout, resolve),
       timeout
     );
   };
-  _getParentEditor = (element) => {
+  getParentEditor = (element) => {
     if (!element.parentElement) return element;
     const parent = element.parentElement;
     const editor = element.querySelector(".entity-editor__control-group");
-    return editor || this._getParentEditor(parent);
+    return editor || this.getParentEditor(parent);
   };
 }
 

@@ -24,15 +24,15 @@ class JsonEditorAddon {
   }
 
   processLine(line, parentIndex, nodes) {
-    const trimmedLineText = this._sanitizeLine(line);
+    const trimmedLineText = this.sanitizeLine(line);
 
     if (trimmedLineText.endsWith("{")) {
-      return this._createTreeNode(this.htmlElement, nodes, parentIndex, line);
+      return this.createTreeNode(this.htmlElement, nodes, parentIndex, line);
     } else if (
       trimmedLineText.endsWith("}") ||
       trimmedLineText.endsWith("},")
     ) {
-      return this._createEndNode(this.htmlElement, nodes, parentIndex, line);
+      return this.createEndNode(this.htmlElement, nodes, parentIndex, line);
     }
     return parentIndex;
   }
@@ -41,11 +41,11 @@ class JsonEditorAddon {
     this.htmlElement.onkeyup = () => this.reload();
   }
 
-  _sanitizeLine(line) {
+  sanitizeLine(line) {
     return line.textContent.replace(/\s/g, "");
   }
 
-  _createTreeNode(jsonEditor, nodes, index, line) {
+  createTreeNode(jsonEditor, nodes, index, line) {
     const node = line.treeNode || new TreeNode(line);
     node.initStartFold(jsonEditor);
     const newIndex = index + 1;
@@ -57,7 +57,7 @@ class JsonEditorAddon {
     return newIndex;
   }
 
-  _createEndNode(editor, nodes, index, line) {
+  createEndNode(editor, nodes, index, line) {
     let startNode = index == 0 ? nodes[0] : nodes.splice(nodes.length - 1)[0];
     const endNode = line.treeNode || new TreeNode(line);
     endNode.initEndFold(editor, startNode);
