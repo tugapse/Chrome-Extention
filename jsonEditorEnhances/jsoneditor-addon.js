@@ -2,6 +2,17 @@ class JsonEditorAddon {
   htmlElement = null;
   rootNode = null;
   config = false;
+  lastPressed = null;
+  timer = null;
+
+  timerUpdate() {
+    if (Date.now() > this.lastPressed + this.config.timeBeforeUpdate) {
+      clearInterval(this.timer);
+      this.timer = null;
+      this.lastPressed = null;
+      this.reload();
+    }
+  }
 
   get lines() {
     return this.htmlElement.querySelectorAll(
@@ -23,22 +34,36 @@ class JsonEditorAddon {
     );
   }
 
-  processLine(line, parentIndex, nodes) {
+  isStartFold(line){
     const trimmedLineText = this.sanitizeLine(line);
+    return trimmedLineText.endsWith("{") 
+    // || trimmedLineText.endsWith("[") ;
+  }
 
-    if (trimmedLineText.endsWith("{")) {
+  isEndFold(line){
+    const trimmedLineText = this.sanitizeLine(line);
+    return trimmedLineText.endsWith("}") ||  trimmedLineText.endsWith("},")
+    //|| trimmedLineText.endsWith("]") ||  trimmedLineText.endsWith("],")
+  }
+
+  processLine(line, parentIndex, nodes) {
+    const node = nodes[parentIndex];
+    if (this.isStartFold(line)) {
       return this.createTreeNode(this.htmlElement, nodes, parentIndex, line);
-    } else if (
-      trimmedLineText.endsWith("}") ||
-      trimmedLineText.endsWith("},")
-    ) {
+    } else if (this.isEndFold(line)) {
       return this.createEndNode(this.htmlElement, nodes, parentIndex, line);
     }
+    node &&  node.addLine(line);
     return parentIndex;
   }
 
   addListeners() {
-    this.htmlElement.onkeyup = () => this.reload();
+    this.htmlElement.onkeyup = () =>{
+      this.lastPressed = Date.now();
+      if(!this.timer){
+        this.timer = setInterval(() =>this.timerUpdate(), 1000);
+      }
+    } 
   }
 
   sanitizeLine(line) {

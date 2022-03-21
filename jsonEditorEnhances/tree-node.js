@@ -1,3 +1,7 @@
+class FoldAction {
+  static COLLAPSE = "collapse"
+  static EXPAND = "expand"
+}
 class TreeNode {
   static Root;
   jsonEditor = null;
@@ -12,23 +16,36 @@ class TreeNode {
     this.htmlElemnt = element;
   }
 
+  updateHandle(foldAction) {
+    switch (foldAction) {
+      case FoldAction.COLLAPSE:
+        this.foldElement.textContent = "+";
+        break;
+      case FoldAction.EXPAND:
+        this.foldElement.textContent = "-";
+        break;
+    }
+  }
+
   collapse() {
     const validLines = this.getValidLines();
-    validLines.forEach((line) => this.addLine(line));
+    validLines.forEach((line) => this.addLine(line, true));
     this.htmlElemnt.classList.add("collapsed");
-    this.foldElement.textContent = "+";
+    this.updateHandle(FoldAction.COLLAPSE);
     this.collapsed = true;
     this.htmlElemnt.foldNode = this;
+    window.dispatchEvent(new Event("resize"));
   }
 
   expand(updateChildren = true) {
-    this.foldElement.textContent = "-";
+    this.updateHandle(FoldAction.EXPAND);
     this.collapsed = false;
     this.htmlElemnt.classList.remove("collapsed");
 
     if (updateChildren) {
       this.lines.forEach((line) => this.expandLine(line));
     }
+    window.dispatchEvent(new Event("resize"));
   }
 
   initStartFold(editor) {
@@ -38,11 +55,15 @@ class TreeNode {
     this.addEvents();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
   }
+
   initEndFold(editor, startNode) {
     this.jsonEditor = editor;
     this.connectedNode = startNode;
-    this.htmlElemnt.classList.add("fold-end");
     startNode.connectedNode = this;
+    this.htmlElemnt.classList.add("fold-end");
+    if(startNode.htmlElemnt.classList.contains("collapsed")){
+      startNode.collapse();
+    }
   }
 
   addEvents() {
@@ -79,7 +100,7 @@ class TreeNode {
         : elm.classList.remove(lineClass);
     }
   }
-  
+
   checkExpand(e) {
     this.collapsed && !e.foldDone && this.expand();
   }
@@ -107,12 +128,11 @@ class TreeNode {
     } else {
       this.collapse();
     }
-    window.dispatchEvent(new Event("resize"));
   }
 
-  addLine(line) {
+  addLine(line, hide = false) {
     line.nodeEditor = this;
-    line.classList.add("hidden");
     this.lines.push(line);
+    if(hide) line.classList.add("hidden");
   }
 }
