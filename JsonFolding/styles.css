@@ -6,8 +6,8 @@
     display: none;
 }
 
-.CodeMirror-line.has-fold:hover {
-    background-color:#f1f1f1;
+.CodeMirror-line.highlight {
+    background-color:#f1f1f1 !important;
 }
 
 .fold-start{
