@@ -6,6 +6,10 @@
     display: none;
 }
 
+.CodeMirror-line.has-fold:hover {
+    background-color:#f1f1f1;
+}
+
 .fold-start{
     cursor: pointer;
     content: "+";

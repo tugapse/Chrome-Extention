@@ -38,6 +38,7 @@ class TreeNode {
   initStartFold(editor) {
     this.jsonEditor = editor;
     this.htmlElemnt.onclick = (e) => this._checkExpand(e);
+    this.htmlElemnt.classList.add("has-fold");
     this._createFoldElement();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
   }
