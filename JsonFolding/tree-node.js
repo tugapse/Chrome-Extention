@@ -33,15 +33,10 @@ class TreeNode {
 
   initStartFold(editor) {
     this.jsonEditor = editor;
-    this.addEvents();
     this.htmlElemnt.classList.add("has-fold");
     this._createFoldElement();
+    this._addEvents();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
-  }
-  addEvents() {
-    this.htmlElemnt.onclick = (e) => this._checkExpand(e);
-    this.htmlElemnt.onmouseenter = (e) => this._highlightNodes();
-    this.htmlElemnt.onmouseleave = (e) => this._highlightNodes(false);
   }
   initEndFold(editor, startNode) {
     this.jsonEditor = editor;
@@ -50,6 +45,11 @@ class TreeNode {
     startNode.connectedNode = this;
   }
 
+  _addEvents() {
+    this.htmlElemnt.onclick = (e) => this._checkExpand(e);
+    this.foldElement.onmouseenter = (e) => this._highlightNodes();
+    this.foldElement.onmouseleave = (e) => this._highlightNodes(false);
+  }
   _getValidLines() {
     const lines = this.jsonEditor.editorAddon.lines;
     const linesArray = Array.prototype.slice.call(lines);
