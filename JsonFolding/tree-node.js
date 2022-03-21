@@ -12,7 +12,7 @@ class TreeNode {
     this.htmlElemnt = element;
   }
 
-  collapseTree() {
+  collapse() {
     const lines = this.jsonEditor.editorAddon.lines;
     const linesArray = Array.prototype.slice.call(lines);
     const startIndex = linesArray.indexOf(this.htmlElemnt) + 1;
@@ -22,27 +22,23 @@ class TreeNode {
     validLines.forEach((line) => this._addLine(line));
     this.foldElement.textContent = "+";
     this.collapsed = true;
+    this.htmlElemnt.foldNode = this;
   }
 
-  expandTree() {
-    this.lines.forEach((line) => line.classList.remove("hidden"));
-    this.htmlElemnt.classList.remove("collapsed");
-    if (this.connectedNode)
-      this.connectedNode.htmlElemnt.style.background = "transparent";
+  expand(updateChildren = true) {
     this.foldElement.textContent = "-";
     this.collapsed = false;
+    this.htmlElemnt.classList.remove("collapsed");
+
+    if (updateChildren) {
+      this.lines.forEach((line) => this._expandLine(line));
+    }
   }
 
   initStartFold(editor) {
     this.jsonEditor = editor;
-    this.foldElement =
-      this.htmlElemnt.querySelector(".fold-start") ||
-      document.createElement("span");
-    this.foldElement.textContent = "-";
-    this.foldElement.classList.add("fold-start");
-    this.foldElement.onclick = (e) => this._handleFoldClick(e);
-    this.htmlElemnt.onclick = (e) =>
-      this.collapsed && !e.foldDone && this.expandTree();
+    this.htmlElemnt.onclick = (e) => this._checkExpand(e);
+    this._createFoldElement();
     this.htmlElemnt.insertBefore(this.foldElement, this.htmlElemnt.firstChild);
   }
 
@@ -52,12 +48,32 @@ class TreeNode {
     this.htmlElemnt.classList.add("fold-end");
     startNode.connectedNode = this;
   }
+  _checkExpand(e) {
+    this.collapsed && !e.foldDone && this.expand();
+  }
+
+  _createFoldElement() {
+    this.foldElement =
+      this.htmlElemnt.querySelector(".fold-start") ||
+      document.createElement("span");
+    this.foldElement.textContent = "-";
+    this.foldElement.classList.add("fold-start");
+    this.foldElement.onclick = (e) => this._handleFoldClick(e);
+  }
+
+  _expandLine(line) {
+    line.classList.remove("hidden");
+    if (line.foldNode) {
+      line.foldNode.expand(false);
+    }
+  }
+
   _handleFoldClick(e) {
     e.foldDone = true;
     if (this.collapsed) {
-      this.expandTree();
+      this.expand();
     } else {
-      this.collapseTree();
+      this.collapse();
     }
     window.dispatchEvent(new Event("resize"));
   }
