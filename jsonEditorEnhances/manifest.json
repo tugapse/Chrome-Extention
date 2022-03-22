@@ -1,0 +1,18 @@
+{
+  "name": "Contentful json editor enhancements",
+  "description": "WIP",
+  "version": "0.1",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": ["https://app.contentful.com/*"],
+      "css": ["styles.css"],
+      "js": [
+        "config.js",
+        "jsoneditor-addon.js",
+        "tree-node.js",
+        "content-script.js"
+      ]
+    }
+  ]
+}

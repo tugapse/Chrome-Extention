@@ -1,0 +1,69 @@
+.CodeMirror-scroll {
+    padding-left: 15px;
+}
+
+.CodeMirror-line.hidden{
+    display: none;
+}
+
+.CodeMirror-line.highlight {
+    background-color:#f1f1f1 !important;
+}
+
+.fold-start{
+    cursor: pointer;
+    content: "+";
+    font-size: 18px;
+    position: absolute;
+    left: -8px;
+    transform: translate(-2px,-3px);
+    padding: 5px 8px;
+    font-family: fantasy;
+}
+
+
+.CodeMirror-line.collapsed > :nth-child(2) {
+    border-bottom: darkred dashed 1px;
+}
+
+
+
+/* Editor color Styles */
+.cm-string{
+    color:rgb(161, 104, 18);
+}
+.cm-string::before{
+    content: "\"";
+    position: absolute;
+    color:brown;
+}
+.cm-string::after{
+    content: "\"";
+    position: absolute;
+    transform: translateX(-8px);
+    color:brown;
+}
+
+
+.cm-property{
+    color:slateblue;
+}
+.cm-property::before{
+    content: "\"";
+    position: absolute;
+    color:brown;
+}.cm-property::after{
+    content: "\"";
+    position: absolute;
+    transform: translateX(-8px);
+    color:brown;
+}
+
+
+.cm-number{
+    color:darkblue;
+}
+
+.cm-atom{
+    color:blue;
+}
